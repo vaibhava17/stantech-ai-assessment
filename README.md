@@ -14,3 +14,7 @@
   - Setting up a Flask application with SQLAlchemy to interact with the MySQL database.
   - Implementing API endpoints to retrieve customer spending information, handle orders, and manage product data.
   - Utilizing JWT for secure authentication.
+
+## Versions
+- MySQL: 8.0.3
+- Python: 3.9.6
