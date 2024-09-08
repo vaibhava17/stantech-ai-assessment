@@ -1,5 +1,11 @@
+-- Create schema Ecom_db
+CREATE DATABASE ecom_db;
+
+-- Use schema Ecom_db
+USE ecom_db;
+
 -- Create Customers table
-CREATE TABLE Customers (
+CREATE TABLE customers (
     customer_id INT PRIMARY KEY AUTO_INCREMENT,
     customer_name VARCHAR(100),
     email VARCHAR(100),
@@ -7,7 +13,7 @@ CREATE TABLE Customers (
 );
 
 -- Create Orders table
-CREATE TABLE Orders (
+CREATE TABLE orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
     customer_id INT,
     order_date DATE,
@@ -16,7 +22,7 @@ CREATE TABLE Orders (
 );
 
 -- Create Order_Items table
-CREATE TABLE Order_Items (
+CREATE TABLE order_items (
     order_item_id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT,
     product_id INT,
@@ -26,14 +32,14 @@ CREATE TABLE Order_Items (
 );
 
 -- Create Products table
-CREATE TABLE Products (
+CREATE TABLE products (
     product_id INT PRIMARY KEY AUTO_INCREMENT,
     product_name VARCHAR(100),
     category VARCHAR(50)
 );
 
 -- Insert dummy data into Customers table
-INSERT INTO Customers (customer_name, email, signup_date) VALUES
+INSERT INTO customers (customer_name, email, signup_date) VALUES
 ('Alice', 'alice@example.com', '2022-01-15'),
 ('Bob', 'bob@example.com', '2022-03-20'),
 ('Charlie', 'charlie@example.com', '2021-11-05'),
@@ -46,7 +52,7 @@ INSERT INTO Customers (customer_name, email, signup_date) VALUES
 ('Jack', 'jack@example.com', '2023-02-10');
 
 -- Insert dummy data into Products table
-INSERT INTO Products (product_name, category) VALUES
+INSERT INTO products (product_name, category) VALUES
 ('Laptop', 'Electronics'),
 ('Smartphone', 'Electronics'),
 ('Shoes', 'Fashion'),
@@ -60,7 +66,7 @@ INSERT INTO Products (product_name, category) VALUES
 ('Dress', 'Fashion');
 
 -- Insert dummy data into Orders table
-INSERT INTO Orders (customer_id, order_date, total_amount) VALUES
+INSERT INTO orders (customer_id, order_date, total_amount) VALUES
 (1, '2023-06-10', 200.00), -- Alice's 1st order
 (1, '2023-08-14', 300.00), -- Alice's 2nd order
 (2, '2023-07-22', 150.00), -- Bob's 1st order
@@ -94,7 +100,7 @@ INSERT INTO Orders (customer_id, order_date, total_amount) VALUES
 (10, '2024-07-28', 500.00);  -- Jack's new order
 
 -- Insert dummy data into Order_Items table
-INSERT INTO Order_Items (order_id, product_id, quantity, price_per_unit) VALUES
+INSERT INTO order_items (order_id, product_id, quantity, price_per_unit) VALUES
 (1, 1, 1, 200.00),  -- Alice bought 1 Laptop
 (2, 2, 1, 300.00),  -- Alice bought 1 Smartphone
 (3, 3, 2, 75.00),   -- Bob bought 2 Shoes
@@ -138,34 +144,34 @@ INSERT INTO Order_Items (order_id, product_id, quantity, price_per_unit) VALUES
 -- Step 4: Combine the results and get the top 5 customers
 
 
-WITH CustomerSpending AS (
+WITH customer_spending AS (
     SELECT 
         o.customer_id,
         c.customer_name,
         c.email,
         p.category,
         SUM(oi.quantity * oi.price_per_unit) AS category_spent
-    FROM Orders o
-    JOIN Customers c ON o.customer_id = c.customer_id
-    JOIN Order_Items oi ON o.order_id = oi.order_id
-    JOIN Products p ON oi.product_id = p.product_id
+    FROM orders o
+    JOIN customers c ON o.customer_id = c.customer_id
+    JOIN order_items oi ON o.order_id = oi.order_id
+    JOIN products p ON oi.product_id = p.product_id
     WHERE o.order_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  -- Consider only orders from the last year
     GROUP BY o.customer_id, p.category
 ),
-MaxCategorySpending AS (
+max_category_spending AS (
     SELECT cs1.customer_id, cs1.category AS most_purchased_category
-    FROM CustomerSpending cs1
-    LEFT JOIN CustomerSpending cs2
+    FROM customer_spending cs1
+    LEFT JOIN customer_spending cs2
         ON cs1.customer_id = cs2.customer_id 
         AND cs1.category_spent < cs2.category_spent
     WHERE cs2.customer_id IS NULL  -- Ensure we get only the max category spent per customer
 ),
-TotalCustomerSpending AS (
+total_customer_spending AS (
     SELECT 
         o.customer_id,
         SUM(oi.quantity * oi.price_per_unit) AS total_spent
-    FROM Orders o
-    JOIN Order_Items oi ON o.order_id = oi.order_id
+    FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id
     WHERE o.order_date >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)  -- Consider only orders from the last year
     GROUP BY o.customer_id
 )
@@ -175,9 +181,9 @@ SELECT
     c.email,
     tcs.total_spent,
     mcs.most_purchased_category
-FROM TotalCustomerSpending tcs
-JOIN Customers c ON tcs.customer_id = c.customer_id
-JOIN MaxCategorySpending mcs ON tcs.customer_id = mcs.customer_id
+FROM total_customer_spending tcs
+JOIN customers c ON tcs.customer_id = c.customer_id
+JOIN max_category_spending mcs ON tcs.customer_id = mcs.customer_id
 ORDER BY tcs.total_spent DESC
 LIMIT 5;
 
