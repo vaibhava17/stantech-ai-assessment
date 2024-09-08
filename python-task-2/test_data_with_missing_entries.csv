@@ -1,0 +1,16 @@
+product_id,product_name,category,price,quantity_sold,rating,review_count
+1,Brooks 1,A lister,10,2,3,20
+2,Sams 2,A lister,20,3,5,10
+3,Dins 3,B lister,10,6,3,24
+4,Polk 4,C lister,15,4,2,8
+5,Beta 5,C lister,25,9,5,32
+6,Alpha 6,A lister,18,,4,15
+7,Zeta 7,B lister,,7,3,20
+8,Theta 8,C lister,22,5,,10
+9,Epsilon 9,A lister,14,3,5,
+10,Gamma 10,B lister,30,,4,18
+11,Delta 11,C lister,,8,,15
+12,Eta 12,A lister,16,4,4,22
+13,Iota 13,B lister,25,6,,20
+14,Kappa 14,C lister,20,,3,12
+15,Lambda 15,A lister,,5,4,

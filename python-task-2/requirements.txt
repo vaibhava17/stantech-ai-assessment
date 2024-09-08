@@ -1,0 +1,10 @@
+Flask
+flask-jwt-extended
+pandas
+SQLAlchemy
+Flask-SQLAlchemy
+pymysql
+flask-bcrypt
+Flask-JWT
+werkzeug
+exc
