@@ -1,4 +1,4 @@
-# Flask E-Commerce App
+# Task 2
 
 This is a Flask-based e-commerce application that includes user authentication, CSV data upload and processing, and a summary report generation. The app uses SQLAlchemy for ORM and integrates with various helper classes to manage uploads, authentication, and reporting.
 
@@ -23,8 +23,8 @@ This is a Flask-based e-commerce application that includes user authentication, 
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/vaibhava17/flask-ecomm.git
-    cd flask-ecomm
+    git clone https://github.com/vaibhava17/stantech-ai-assessment.git
+    cd stantech-ai-assessment/python-task-2
     ```
 
 2. **Create and Activate a Virtual Environment**
