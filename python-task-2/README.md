@@ -58,7 +58,7 @@ This is a Flask-based e-commerce application that includes user authentication, 
 To run the Flask application in development mode:
 
 ```bash
-python3 run
+python3 run main.py
 ```
 
 ## Endpoints
